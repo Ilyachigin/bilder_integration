@@ -50,4 +50,3 @@ def send_request(method: str, url: str, headers: dict, payload: dict | str  | by
     result["duration"] = round(time.perf_counter() - start_time, 4)
 
     return result
-

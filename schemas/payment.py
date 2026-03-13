@@ -18,6 +18,7 @@ class PaymentInfo(BaseModel):
     gateway_amount: int
     gateway_currency: str
     merchant_private_key: str
+    extra_return_param: str
 
 
 class SettingsInfo(BaseModel):
@@ -28,6 +29,7 @@ class SettingsInfo(BaseModel):
     x_key: str
     x_user: str
     sign_key: str
+    bank_name: Optional[dict] = None
 
 
 class PaymentRequestSchema(BaseModel):

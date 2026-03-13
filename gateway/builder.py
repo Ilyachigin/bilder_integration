@@ -167,14 +167,20 @@ def customer_params(data: dict) -> Dict:
 
 
 def main_params(business_data: dict) -> Dict:
-    payment_params = business_data.get("payment", {})
+    payment_data = business_data.get("payment", {})
+    settings_data = business_data.get("settings", {})
+
+    bank_list = settings_data.get("bank_list", {})
+    extra_param = payment_data.get("extra_return_param", "")
 
     params = {
-        "amount": amount_convert(payment_params.get("gateway_amount")),
-        "currency": payment_params.get("gateway_currency"),
-        "externalPaymentId": payment_params.get("token"),
-        "returnUrl": business_data.get("processing_url")
+        "amount": amount_convert(payment_data.get("gateway_amount")),
+        "currency": payment_data.get("gateway_currency"),
+        "externalPaymentId": payment_data.get("token"),
+        "returnUrl": business_data.get("processing_url"),
+        "institutionId": bank_request(bank_list, extra_param)
     }
+
     return clean_data(params)
 
 
@@ -341,4 +347,11 @@ def gateway_signature(body: bytes, private_key_pem: str) -> str:
     )
 
     return base64.b64encode(signature_bytes).decode("ascii")
+
+
+def bank_request(bank_list: dict | None, extra_param: str) -> str | None:
+    if not bank_list or not extra_param:
+        return None
+
+    return bank_list.get(extra_param)
 
